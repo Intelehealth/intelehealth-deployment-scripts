@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: intelehealth-backend:latest
+    container_name: intelehealth-backend
+    ports:
+      - "${PORT:-3004}:3004"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  cron:
+    image: intelehealth-backend:latest
+    container_name: intelehealth-cron
+    command: ["node", "cron_server.js"]
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - app
