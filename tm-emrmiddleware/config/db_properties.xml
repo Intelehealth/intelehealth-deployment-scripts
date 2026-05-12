@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <environments default="development">
+
+    <!-- =====================================================================
+         Fill in your actual DB host, port, schema, username, and password.
+         The id here must match MybatisEnvironmentId in config.properties.
+         ===================================================================== -->
+    <environment id="intelehealthAwsTest">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+        <!-- Replace host, port, and db_name below -->
+        <property name="url"      value="jdbc:mysql://DB_HOST:DB_PORT/DB_NAME?autoReconnect=true&amp;useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="username" value="DB_USERNAME"/>
+        <property name="password" value="DB_PASSWORD"/>
+
+        <!-- Connection pool settings -->
+        <property name="poolMaximumActiveConnections"        value="6"/>
+        <property name="poolMaximumIdleConnections"          value="3"/>
+        <property name="poolMaximumCheckoutTime"             value="24000"/>
+        <property name="poolPingEnabled"                     value="true"/>
+        <property name="poolPingQuery"                       value="select 1"/>
+        <property name="poolPingConnectionsNotUsedFor"       value="24000"/>
+      </dataSource>
+    </environment>
+
+  </environments>
+
+  <mappers>
+    <mapper resource="com/emrmiddleware/dmo/PatientDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/VisitDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/EncounterDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/ObsDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/LocationDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/ProviderDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/PersonDMO.xml"/>
+    <mapper resource="com/emrmiddleware/dmo/UserCredentialsDMO.xml"/>
+  </mappers>
+
+</configuration>

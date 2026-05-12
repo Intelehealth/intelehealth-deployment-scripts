@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  emr-middleware:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: emr-middleware:latest
+    container_name: emr-middleware
+    ports:
+      - "8999:8080"
+    volumes:
+      # Mount config files into the deployed webapp's classpath directory.
+      # These override what was bundled at build time.
+      - ./config/config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
+      - ./config/db_properties.xml:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/db_properties.xml:ro
+    env_file:
+      - .env
+    restart: unless-stopped
