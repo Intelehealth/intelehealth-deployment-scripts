@@ -1,0 +1,10 @@
+services:
+  intelehealth-webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: intelehealth-doctor-webapp:unicef_krygz_dev_master
+    container_name: intelehealth-webapp
+    ports:
+      - "81:80"
+    restart: unless-stopped
