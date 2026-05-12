@@ -1,0 +1,59 @@
+version: '3.8'
+
+networks:
+  openmrs-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
+
+x-logging: &default-logging
+  driver: local
+  options:
+    max-size: "50m"
+    max-file: "72"
+    compress: "true"
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: openmrs-mysql
+    restart: unless-stopped
+    networks:
+      - openmrs-net
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: openmrs
+      MYSQL_USER: openmrs
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d:ro
+    ports:
+      - "127.0.0.1:3306:3306"
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u openmrs -p$$MYSQL_PASSWORD"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  openmrs:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: openmrs-app:2.1.4
+    container_name: openmrs-app
+    restart: unless-stopped
+    networks:
+      - openmrs-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./data:/opt/openmrs/data
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      OPENMRS_APPLICATION_DATA_DIRECTORY: /opt/openmrs/data
+    logging: *default-logging

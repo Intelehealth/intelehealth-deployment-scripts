@@ -1,0 +1,21 @@
+[mysqld]
+# Character set
+character-set-server = utf8
+collation-server     = utf8_general_ci
+
+# Performance tuning
+innodb_buffer_pool_size = 256M
+max_allowed_packet      = 64M
+wait_timeout            = 600
+interactive_timeout     = 600
+
+# Security
+local-infile            = 0
+symbolic-links          = 0
+bind-address            = 0.0.0.0
+
+# Logging
+general_log             = 0
+slow_query_log          = 1
+slow_query_log_file     = /var/lib/mysql/slow.log
+long_query_time         = 2
